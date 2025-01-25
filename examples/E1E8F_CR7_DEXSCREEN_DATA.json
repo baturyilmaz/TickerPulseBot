@@ -1,0 +1,15 @@
+{
+  "name": "Cristiano Ronaldo",
+  "symbol": "CR7",
+  "chain": "solana",
+  "dex": "raydium",
+  "price": "$0.000936",
+  "priceChange24h": "661.00%",
+  "liquidity": "$168,286.84",
+  "volume24h": "$21,254,418.97",
+  "marketCap": "$936,411",
+  "age": "0 days",
+  "website": "https://cr7memeland.com/",
+  "twitter": "N/A",
+  "dexScreenerUrl": "https://dexscreener.com/solana/un65adfw7gf3lvgyegk6lpghfzfw57r7anspgv5cmis"
+}

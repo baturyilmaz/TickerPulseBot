@@ -1,0 +1,24 @@
+{
+  "token_name": "CR7",
+  "blockchain": "Solana",
+  "current_price": "$0.0008801 to $0.001837",
+  "price_change_24h": "Up 615.8%",
+  "trading_volume_24h": "$17.03 million",
+  "market_cap": "$2.4 million",
+  "total_supply": "1 billion tokens",
+  "liquidity_pool": "$148,170",
+  "trading_platforms": ["Raydium"],
+  "description": "CR7 is a new cryptocurrency token associated with football star Cristiano Ronaldo. The token was recently launched on the Solana blockchain. It has experienced significant price volatility and high trading volume since its launch, typical of new meme coins and celebrity-associated cryptocurrencies.",
+  "citations": [
+    "https://www.geckoterminal.com/solana/pools/un65AdfW7gf3LVgYEgK6LpGHFZFW57r7anSpgv5cmiS",
+    "https://top100token.com/address/0xb56e0e7bb7f58ff5f7a57c6d78f4b70a0f578c6a",
+    "https://coinmarketcap.com/dexscan/solana/HoY8LrnkByubz2xVxQMCgfd1W8EuJZiSiQLWzRZzYBt8/",
+    "https://coinmarketcap.com/dexscan/solana/un65AdfW7gf3LVgYEgK6LpGHFZFW57r7anSpgv5cmiS/",
+    "https://www.binance.com/en/square/post/19300066213562",
+    "https://top100token.com/address/0xd40bb5ef3a5183930a187e96a33dabbcd5117747",
+    "https://www.coinbase.com/price/cr7dao",
+    "https://web3.bitget.com/en/swap/sol/CR7ux8AY8a6pJD9ekLDPi19u2ujFNSvBFgUh36sBJU2W",
+    "https://dexscreener.com/solana/2iggzvacuhb5ygcqbuwsgttfr7ir4qnd7qxreddwmoon",
+    "https://dexscreener.com/solana/5fxprycsrtif2onvsvjklstgpwghcgnccu5qa5gwmoon"
+  ]
+}
