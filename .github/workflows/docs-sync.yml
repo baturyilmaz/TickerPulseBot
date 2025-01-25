@@ -1,0 +1,35 @@
+name: Sync README to openserv-docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sdk repository
+        uses: actions/checkout@v2
+
+      - name: Checkout openserv-docs repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'openserv-labs/openserv-docs'
+          token: ${{ secrets.GH_TOKEN }}
+          path: 'openserv-docs'
+
+      - name: Copy README.md to openserv-docs
+        run: |
+          cp README.md openserv-docs/packages/agent-starter/README.md
+
+      - name: Commit and push if changed
+        working-directory: ./openserv-docs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add packages/agent-starter/README.md
+          git commit -m "Update README from agent-starter repository" || exit 0
+          git push
