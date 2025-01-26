@@ -6,6 +6,12 @@ A Telegram bot that provides comprehensive analysis of cryptocurrency tokens usi
 
 **Note:** The project is built with the goal of using the OpenServ Platform agents and workflows to create a collabrative agentic workflow. The project is not intended to be used as a standalone bot.
 
+## The Team
+
+![Team](examples/team.png)
+
+![How it works?](examples/howitworks.gif)
+
 ## Features
 
 - Real-time token data from DEXScreener
@@ -17,6 +23,7 @@ A Telegram bot that provides comprehensive analysis of cryptocurrency tokens usi
 ## Roadmap
 
 - Fixing the chatID system's naive implementation
+- Better error handling
 - Adding different bot commands for:
   - Detailed summary
   - Concise answer
@@ -120,7 +127,7 @@ npm run dev
 Report generated 2025-01-25T17:41:43.036Z via OpenServ Analytics
 ```
 
-![Image 1](examples/result.png)
+![Example](examples/result.png)
 
 ## Report Format
 
