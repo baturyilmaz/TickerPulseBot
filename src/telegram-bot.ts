@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api'
 import { z } from 'zod'
 import { createSequentialTasks } from './index'
-import { setCurrentChatId } from './shared-state'
+import { setCurrentChatId, cleanupOldSessions } from './shared-state'
 import { v4 as uuidv4 } from 'uuid'
 
 const envSchema = z.object({
@@ -22,6 +22,12 @@ const tickerRegex = /\$([A-Za-z0-9]+)/g
 export function startTelegramBot() {
   console.log('Starting Telegram bot...')
 
+  // Clean up old sessions on startup
+  cleanupOldSessions()
+
+  // Set up a periodic cleanup (e.g., every 6 hours)
+  setInterval(cleanupOldSessions, 6 * 60 * 60 * 1000)
+
   bot.on('message', async msg => {
     const chatId = msg.chat.id
     const messageText = msg.text || ''
@@ -34,7 +40,7 @@ export function startTelegramBot() {
         console.log(`Found ticker: ${cleanTicker} in chat ${chatId}, Request ID: ${requestId}`)
 
         try {
-          setCurrentChatId(chatId)
+          setCurrentChatId(chatId, requestId)
 
           await bot.sendMessage(chatId, `Processing ticker: ${cleanTicker} (ID: ${requestId})`)
           const response = await createSequentialTasks(cleanTicker, requestId)

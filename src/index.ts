@@ -28,10 +28,11 @@ teleTickerAgent.addCapability({
   name: 'sendLatestResults',
   description: 'Send latest results to the Telegram bot',
   schema: z.object({
+    uuid: z.string(),
     content: z.string()
   }),
   async run({ args }) {
-    const chatId = getCurrentChatId()
+    const chatId = getCurrentChatId(args.uuid)
     if (!chatId) {
       return 'No chat ID available'
     }
@@ -70,8 +71,9 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
   const webSearchTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
     assignee: WorkflowAgents.PERPLEXITY_AGENT,
-    body: `Conduct a focused web search for ${ticker + ' token'}. Gather relevant news, headlines, updates, and references.`,
-    description: `Web research for ${ticker + ' token'} token`,
+    body: `Conduct a focused web search for ${ticker + ' token'} (do not delete or add anything to this search query). 
+    Gather relevant news, headlines, updates, and references.`,
+    description: `Web research for ${ticker + ' token'}`,
     input: ticker,
     expectedOutput: `JSON containing web research data, save it as json file saved as: ${uuid}_${ticker}_WEB_RESEARCH_DATA.json }`,
     dependencies: [dexscreenTask.id]
@@ -113,9 +115,9 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
   const sendReportTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
     assignee: WorkflowAgents.AGENT,
-    body: `Send the generated Telegram message content to the specified Telegram bot or channel.`,
+    body: `Send the generated Telegram message content to the specified Telegram bot or channel along with uuid. uuid for this message is ${uuid}`,
     description: `Send generated content to Telegram`,
-    input: `${uuid}_${ticker}_REPORT.txt`,
+    input: `${uuid}_${ticker}_REPORT.txt and the uuid : ${uuid}`,
     expectedOutput: `Confirmation of message sent to Telegram.`,
     dependencies: [generateReportTask.id]
   })
