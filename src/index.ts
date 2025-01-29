@@ -70,7 +70,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
     workspaceId: WORKSPACE_ID,
     assignee: SEARCH_AGENT,
     body: `Conduct a focused web search for ${ticker + ' token'} (do not delete or add anything to this search query). 
-    Gather relevant news, headlines, updates, and references.`,
+    Gather relevant news, headlines, and references. Do not include any price or market cap information unless it is historical.`,
     description: `Web research for ${ticker + ' token'}`,
     input: ticker,
     expectedOutput: `JSON containing web research data, save it as json file saved as: ${uuid}_${ticker}_WEB_RESEARCH_DATA.json }`,
