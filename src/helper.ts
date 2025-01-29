@@ -1,3 +1,31 @@
+import { z } from 'zod'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const envSchema = z.object({
+  // Bot token
+  TELEGRAM_BOT_TOKEN: z.string(),
+  
+  // Agent IDs
+  AGENT_ID: z.coerce.number(),
+  DEXSCREEN_AGENT_ID: z.coerce.number(),
+  JSON_ANALYZER_ID: z.coerce.number(),
+  TWITTER_FETCHER_ID: z.coerce.number(),
+  SEARCH_AGENT_ID: z.coerce.number(),
+  COPY_WRITER_ID: z.coerce.number(),
+})
+
+export const env = envSchema.parse({
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+  AGENT_ID: process.env.AGENT_ID,
+  DEXSCREEN_AGENT_ID: process.env.DEXSCREEN_AGENT_ID,
+  JSON_ANALYZER_ID: process.env.JSON_ANALYZER_ID,
+  TWITTER_FETCHER_ID: process.env.TWITTER_FETCHER_ID,
+  SEARCH_AGENT_ID: process.env.SEARCH_AGENT_ID,
+  COPY_WRITER_ID: process.env.COPY_WRITER_ID,
+})
+
 export function convertToTelegramMarkdown(text: string): string {
   // First, escape special characters that need escaping in MarkdownV2
   const escapeChars = (str: string) => {

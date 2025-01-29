@@ -3,7 +3,7 @@ import { Agent } from '@openserv-labs/sdk'
 import 'dotenv/config'
 import { bot, startTelegramBot } from './telegram-bot'
 import { getCurrentChatId } from './shared-state'
-import { convertToTelegramMarkdown, reportFormat } from './helper'
+import { convertToTelegramMarkdown, reportFormat, env } from './helper'
 
 if (!process.env.WORKSPACE_ID) {
   throw new Error('Required environment variables are missing')
@@ -11,14 +11,12 @@ if (!process.env.WORKSPACE_ID) {
 
 const WORKSPACE_ID = parseInt(process.env.WORKSPACE_ID)
 
-enum WorkflowAgents {
-  AGENT = 136,
-  DEXSCREEN_AGENT = 145,
-  JSON_ANALYZER = 65,
-  TWITTER_FETCHER = 160,
-  PERPLEXITY_AGENT = 140,
-  COPY_WRITER = 41
-}
+const AGENT = env.AGENT_ID
+const DEXSCREEN_AGENT = env.DEXSCREEN_AGENT_ID
+const JSON_ANALYZER = env.JSON_ANALYZER_ID
+const TWITTER_FETCHER = env.TWITTER_FETCHER_ID
+const SEARCH_AGENT = env.SEARCH_AGENT_ID
+const COPY_WRITER = env.COPY_WRITER_ID
 
 const teleTickerAgent = new Agent({
   systemPrompt: `You are an AI agent capable of formatting and sending messages to Telegram`
@@ -60,7 +58,7 @@ teleTickerAgent.addCapability({
 async function createSequentialTasks(ticker: string, uuid: string): Promise<void> {
   const dexscreenTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.DEXSCREEN_AGENT,
+    assignee: DEXSCREEN_AGENT,
     body: `Get dexscreen data for ${ticker}`,
     description: `Fetch dexscreen data for ${ticker}`,
     input: ticker,
@@ -70,7 +68,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
 
   const webSearchTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.PERPLEXITY_AGENT,
+    assignee: SEARCH_AGENT,
     body: `Conduct a focused web search for ${ticker + ' token'} (do not delete or add anything to this search query). 
     Gather relevant news, headlines, updates, and references.`,
     description: `Web research for ${ticker + ' token'}`,
@@ -81,7 +79,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
 
   const getOfficialTwitterAccount = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.JSON_ANALYZER,
+    assignee: JSON_ANALYZER,
     body: `Analyze ${uuid}_${ticker}_DEXSCREEN_DATA.json to extract the official Twitter account`,
     description: `Analyze dexscreen data to extract the official Twitter account`,
     input: `${uuid}_${ticker}_DEXSCREEN_DATA.json`,
@@ -91,7 +89,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
 
   const twitterTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.TWITTER_FETCHER,
+    assignee: TWITTER_FETCHER,
     body: `Get last 5 tweets from ${ticker}'s official Twitter account`,
     description: `Fetch recent tweets for ${ticker}'s official Twitter account`,
     input: `output of previous task`,
@@ -101,7 +99,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
 
   const generateReportTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.COPY_WRITER,
+    assignee: COPY_WRITER,
     body: `Prepare a thorough, insightful report on the given ticker.Provide meaningful commentary on the results, explaining 
     their potential implications or relevance in the broader context.
     The REPORT MUST FOLLOW THE FOLLOWING FORMAT: ${reportFormat}"
@@ -114,7 +112,7 @@ async function createSequentialTasks(ticker: string, uuid: string): Promise<void
 
   const sendReportTask = await teleTickerAgent.createTask({
     workspaceId: WORKSPACE_ID,
-    assignee: WorkflowAgents.AGENT,
+    assignee: AGENT,
     body: `Send the generated Telegram message content to the specified Telegram bot or channel along with uuid. uuid for this message is ${uuid}`,
     description: `Send generated content to Telegram`,
     input: `${uuid}_${ticker}_REPORT.txt and the uuid : ${uuid}`,
